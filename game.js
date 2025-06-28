@@ -131,6 +131,37 @@ let frameCount = 0;
 let lastFPSUpdate = 0;
 let currentFPS = 0;
 
+// Responsive canvas and mini-map
+function resizeGame() {
+    // Set canvas size to window size
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    // Set mini-map size based on window size
+    const miniMap = document.getElementById('miniMap');
+    const miniMapCanvas = document.getElementById('miniMapCanvas');
+    let mapW = Math.max(100, Math.min(window.innerWidth * 0.25, 180));
+    let mapH = Math.max(60, Math.min(window.innerHeight * 0.15, 120));
+    miniMap.style.width = mapW + 'px';
+    miniMap.style.height = mapH + 'px';
+    miniMapCanvas.width = mapW;
+    miniMapCanvas.height = mapH;
+}
+
+window.addEventListener('resize', resizeGame);
+window.addEventListener('orientationchange', resizeGame);
+
+// Call resizeGame on load
+window.addEventListener('DOMContentLoaded', resizeGame);
+window.onload = () => {
+    setupCarOptions();
+    showCarSelect();
+    initAudio();
+    loadHighScores();
+    detectMobile();
+    initMobileControls();
+    resizeGame();
+};
+
 // Detect mobile device
 function detectMobile() {
     isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
@@ -1099,16 +1130,6 @@ function startGame() {
 function restartGame() {
     showCarSelect();
 }
-
-// On load, show car select
-window.onload = () => {
-    setupCarOptions();
-    showCarSelect();
-    initAudio();
-    loadHighScores();
-    detectMobile();
-    initMobileControls();
-};
 
 // Update FPS counter
 function updateFPS(currentTime) {
